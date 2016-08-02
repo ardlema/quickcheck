@@ -33,10 +33,15 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
     isEmpty(emptyHeap)
   }
 
-  /*property("hint3") = forAll { (h: H) =>
-    def isOrdered(h: H): Boolean = {
-      val element =
+  property("hint3") = forAll { (h: H) =>
+    def isOrdered(h: H, l: List[A]): Boolean = {
+      if (isEmpty(h)) true
+      else {
+        val element = findMin(h)
+        if (!l.isEmpty && l.max > element) false
+        else isOrdered(deleteMin(h), element :: l)
+      }
     }
-    isOrdered(h)
-  }*/
+    isOrdered(h, List())
+  }
 }
